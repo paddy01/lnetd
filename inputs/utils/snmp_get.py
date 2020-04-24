@@ -7,8 +7,12 @@ import re
 logger = get_module_logger(__name__, 'INFO')
 
 INFLUXDB_HOST = '127.0.0.1'
+INFLUXDB_PORT = '8806'
 INFLUXDB_NAME = 'telegraf'
-client = InfluxDBClient(INFLUXDB_HOST, '8086', '', '', INFLUXDB_NAME)
+INFLUXDB_USERNAME = ''
+INFLUXDB_PASSWORD = ''
+
+client = InfluxDBClient(INFLUXDB_HOST, INFLUXDB_PORT, INFLUXDB_USERNAME, INFLUXDB_PASSWORD, INFLUXDB_NAME)
 
 
 def get_ifIndex_IP(hostname, interface):
@@ -59,7 +63,7 @@ def get_capacity_ifIndex(hostname, interface):
                  (hostname, interface))
     if interface == 0 or interface == -1:
         return -1
-    client = InfluxDBClient(INFLUXDB_HOST, '8086', '', '', INFLUXDB_NAME)
+    client = InfluxDBClient(INFLUXDB_HOST, INFLUXDB_PORT, INFLUXDB_USERNAME, INFLUXDB_PASSWORD, INFLUXDB_NAME)
     queryurl = "SELECT last(ifHighSpeed) as capacity from interface_statistics where hostname =~ /%s/ and  ifIndex = '%s'" % (hostname, interface)
     result = client.query(queryurl)
     points = list(result.get_points(measurement='interface_statistics'))
@@ -145,7 +149,7 @@ def get_capacity_ifName(hostname, interface):
                  (hostname, interface))
     if interface == 0 or interface == -1:
         return -1
-    client = InfluxDBClient(INFLUXDB_HOST, '8086', '', '', INFLUXDB_NAME)
+    client = InfluxDBClient(INFLUXDB_HOST, INFLUXDB_PORT, INFLUXDB_USERNAME, INFLUXDB_PASSWORD, INFLUXDB_NAME)
     queryurl = "SELECT last(ifHighSpeed) from interface_statistics where hostname =~ /%s/ and  ifName = '%s'" % (
         hostname, interface)
     result = client.query(queryurl)

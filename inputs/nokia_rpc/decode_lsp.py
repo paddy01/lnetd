@@ -187,10 +187,16 @@ def parseVLenFieldLnetD(ftype, flen, fval, TLV_22_COUNT, verbose=0, level=0):
                                 'r_ip': None})
                 # print(f'TLV:22 with packet at: {fval}')
                 SUB_TLV_END = False
+
                 while not SUB_TLV_END:
                     '''need to test with multiple links
                     '''
-                    (sub_ftype, sub_flen) = struct.unpack(">BB", fval[0:2])
+                    try:
+                        (sub_ftype, sub_flen) = struct.unpack(">BB", fval[0:2])
+                    except:
+                        SUB_TLV_END = True
+                        break
+
                     fval = fval[2:]
                     # print(f'sub_ftype:{sub_ftype}-{sub_flen}')
                     if sub_ftype == 6:
@@ -260,7 +266,16 @@ def parseIsisMsg(msg_len, msg, verbose=0, level=0):
          rv["V"]["BITS"],
          rv["V"]["VFIELDS"]) = parseIsisLsp(msg_len, msg, verbose, level)
 
-    hostname = rv["V"]["VFIELDS"][137][0]["V"][0]
+#    print(rv)
+
+#    try:
+#        hostname = rv["V"]["VFIELDS"][137][0]["V"][0]
+#    except:
+#        print(id2str(rv["V"]["VFIELDS"][22][0]["TLV22-0"][0]["r_ip"]))
+#        print(id2str(rv["V"]["VFIELDS"][22][1]["TLV22-1"][0]["r_ip"]))
+#        print(id2str(rv["V"]["VFIELDS"][22][2]["TLV22-2"][0]["r_ip"]))
+#        exit()
+
     return rv
 
 

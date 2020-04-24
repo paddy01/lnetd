@@ -8,9 +8,30 @@ import datetime
 import pandas as pd
 from influxdb import InfluxDBClient
 
-INFLUXDB_HOST = '127.0.0.1'
-INFLUXDB_NAME = 'telegraf'
-client = InfluxDBClient(INFLUXDB_HOST, '8086', '', '', INFLUXDB_NAME)
+from flask import Flask, current_app
+
+app = Flask(__name__)
+app.config.from_object('config')
+
+#INFLUXDB_HOST = '127.0.0.1'
+#INFLUXDB_NAME = 'telegraf'
+#client = InfluxDBClient(INFLUXDB_HOST, '8086', '', '', INFLUXDB_NAME)
+
+with app.app_context():
+    INFLUXDB_HOST     = app.config['INFLUXDB_HOST']
+    INFLUXDB_PORT     = app.config['INFLUXDB_PORT']
+    INFLUXDB_USERNAME = app.config['INFLUXDB_USERNAME']
+    INFLUXDB_PASSWORD = app.config['INFLUXDB_PASSWORD']
+    INFLUXDB_NAME     = app.config['INFLUXDB_NAME']
+
+
+client = InfluxDBClient(
+                INFLUXDB_HOST,
+                INFLUXDB_PORT,
+                INFLUXDB_USERNAME,
+                INFLUXDB_PASSWORD,
+                INFLUXDB_NAME
+            )
 
 
 pd.set_option('display.max_rows', 500)
@@ -20,7 +41,15 @@ pd.set_option('display.width', 1000)
 def get_interface_ifName(hostname,interface):
     try:
         timestamp = datetime.datetime.utcnow().isoformat()
-        client = InfluxDBClient(INFLUXDB_HOST,'8086','','',INFLUXDB_NAME)
+#        client = InfluxDBClient(INFLUXDB_HOST,'8086','','',INFLUXDB_NAME)
+        client = InfluxDBClient(
+                        INFLUXDB_HOST,
+                        INFLUXDB_PORT,
+                        INFLUXDB_USERNAME,
+                        INFLUXDB_PASSWORD,
+                        INFLUXDB_NAME
+                    )
+
         queryurl = "show tag values with key = ifName where hostname =~ /%s/ and ifIndex ='%s'" %(hostname,interface)
         result = client.query(queryurl)
         points = list(result.get_points(measurement='interface_statistics'))

@@ -169,7 +169,7 @@
 {% block javascripts %}
   {{ super() }}
 
-<!-- <script src="{{ url_for('static', filename='custom/topology/create_legend.js') }}"></script> -->
+<!-- <script src="{{ url_for('.static', filename='custom/topology/create_legend.js') }}"></script> -->
 
 <script src="{{ url_for('map_blueprint.static', filename='create_legend.js') }}"></script>
 

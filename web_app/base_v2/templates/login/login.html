@@ -5,7 +5,7 @@
 {% block stylesheets %}
   {{ super() }}
   <!-- Animate.css -->
-  <link href="{{ url_for('static', filename='vendors/animate.css/animate.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('.static', filename='vendors/animate.css/animate.min.css') }}" rel="stylesheet">
 {% endblock stylesheets %}
 
 {% block body_class %}login{% endblock body_class %}
@@ -38,7 +38,7 @@
                       </label>
                     </div>
                     <button type="submit" class="btn btn-success btn-lg float-right" id="btnLogin" name="login" >Login</button>
-                    <img width="48" height="48" src="/static/images/lnetd_logo.png" alt="logo">
+                    <img width="48" height="48" src="{{ url_for('.static', filename='/images/lnetd_logo.png') }}" alt="logo">
                   </div>
                   <div class="clearfix"></div>
                   <div class="clearfix"></div>

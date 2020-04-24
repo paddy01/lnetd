@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, session
+from flask import Flask, Blueprint, render_template, session, current_app
 from flask_login import login_required
 import pandas as pd
 import json
@@ -17,14 +17,34 @@ from .mutils import generat_unique_info, generate_traffic_util,get_month_util
 from influxdb import InfluxDBClient
 from datetime import date, timedelta
 
-INFLUXDB_HOST = '127.0.0.1'
-INFLUXDB_NAME = 'telegraf_agg'
-client = InfluxDBClient(INFLUXDB_HOST, '8086', '', '', INFLUXDB_NAME)
+#INFLUXDB_HOST = '127.0.0.1'
+#INFLUXDB_NAME = 'telegraf_agg'
+#client = InfluxDBClient(INFLUXDB_HOST, '8086', '', '', INFLUXDB_NAME)
+app = Flask(__name__)
+app.config.from_object('config')
+
+with app.app_context():
+    INFLUXDB_HOST     = app.config['INFLUXDB_HOST']
+    INFLUXDB_PORT     = app.config['INFLUXDB_PORT']
+    INFLUXDB_USERNAME = app.config['INFLUXDB_USERNAME']
+    INFLUXDB_PASSWORD = app.config['INFLUXDB_PASSWORD']
+    INFLUXDB_NAME     = app.config['INFLUXDB_NAME']
+
+
+client = InfluxDBClient(
+                INFLUXDB_HOST,
+                INFLUXDB_PORT,
+                INFLUXDB_USERNAME,
+                INFLUXDB_PASSWORD,
+                INFLUXDB_NAME
+            )
+
+
 
 blueprint = Blueprint(
-    'map_blueprint', 
-    __name__, 
-    url_prefix = '/map', 
+    'map_blueprint',
+    __name__,
+    url_prefix = '/map',
     template_folder = 'templates',
     static_folder = 'static'
     )
@@ -184,7 +204,15 @@ def peer_report():
 @login_required
 def get_graph_data_interface():
     INFLUXDB_NAME = 'telegraf'
-    client = InfluxDBClient(INFLUXDB_HOST, '8086', '', '', INFLUXDB_NAME)
+    #client = InfluxDBClient(INFLUXDB_HOST, '8086', '', '', INFLUXDB_NAME)
+    client = InfluxDBClient(
+                    INFLUXDB_HOST,
+                    INFLUXDB_PORT,
+                    INFLUXDB_USERNAME,
+                    INFLUXDB_PASSWORD,
+                    INFLUXDB_NAME
+                )
+
     rvalue = request.args
     if rvalue['time'] == '24h':
         query = f"""select non_negative_derivative(last(ifHCOutOctets), 1s) *8  as bps_out , non_negative_derivative(last(ifHCInOctets), 1s) *8 as bps_in , last(ifHighSpeed) as capacity

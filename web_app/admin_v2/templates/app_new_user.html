@@ -5,8 +5,8 @@
 {% block stylesheets %}
   {{ super() }}
   <!--alertify -->
-  <link href="{{ url_for('static', filename='vendors/alertifyjs/css/themes/bootstrap.css') }}" rel="stylesheet">
-  <link href="{{ url_for('static', filename='vendors/alertifyjs/css/alertify.css') }}" rel="stylesheet">
+  <link href="{{ url_for('.static', filename='vendors/alertifyjs/css/themes/bootstrap.css') }}" rel="stylesheet">
+  <link href="{{ url_for('.static', filename='vendors/alertifyjs/css/alertify.css') }}" rel="stylesheet">
 {% endblock stylesheets %}
 
 {% block content %}
@@ -102,7 +102,7 @@
 {% block javascripts %}
   {{ super() }}
 <!-- alertifyjs -->
-<script src="{{ url_for('static', filename='vendors/alertifyjs/alertify.min.js') }}"></script>
+<script src="{{ url_for('.static', filename='vendors/alertifyjs/alertify.min.js') }}"></script>
 <script>
 function app_add_user() {
   if ($('app-config-form')) {

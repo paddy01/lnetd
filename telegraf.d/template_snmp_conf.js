@@ -1,15 +1,17 @@
 # # Retrieves SNMP values from remote agents
  [[inputs.snmp]]
-   agents = ["{{host}}:161"]
+   agents = ["{{ host }}:161"]
    timeout = "2s"
    interval = "5m"
    retries = 1
    version = 3
    max_repetitions = 10
    sec_name = "lab"
-   auth_protocol = "md5"
+   auth_protocol = "SHA"
    auth_password = "lab123123"
    sec_level = "authNoPriv"
+   priv_protocol = "AES"
+   priv_password = "lab321321"
    name = "snmp"
    [[inputs.snmp.field]]
     name = "hostname"

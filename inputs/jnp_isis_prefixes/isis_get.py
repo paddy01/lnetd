@@ -23,8 +23,7 @@ def main():
   for name in devices:
     try:
       logger.info('Connecting to : %s' % devices[name])
-      dev = junos.Device(host=devices[name], user='lab',
-                         password='lab123', port='830', gather_facts=False)
+      dev = junos.Device(host=devices[name], user='lab', password='lab123',port='830', gather_facts=False)
       dev.open()
       dev.timeout = 600
       logger.info('Requesting data from device: %s' % devices[name])

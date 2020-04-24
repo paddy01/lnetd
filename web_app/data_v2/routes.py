@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request ,session
+from flask import Flask, Blueprint, render_template, request, session, current_app
 from flask_login import login_required
 from objects_v2.models import Routers,Links,Links_latency,Node_position,Links_Model,App_config,Layer1Topology
 from database import db
@@ -12,6 +12,9 @@ from .snmp_influx import get_max_util
 from .mutils import *
 import collections
 from functools import reduce
+
+app = Flask(__name__)
+app.config.from_object('config')
 
 blueprint = Blueprint(
     'data_blueprint',
@@ -223,9 +226,26 @@ def model_edit():
 @blueprint.route('/traffic_links',methods=['GET', 'POST'])
 @login_required
 def traffic_links():
-    INFLUXDB_HOST = '127.0.0.1'
-    INFLUXDB_NAME = 'telegraf'
-    client = InfluxDBClient(INFLUXDB_HOST,'8086','','',INFLUXDB_NAME)
+#    INFLUXDB_HOST = '127.0.0.1'
+#    INFLUXDB_NAME = 'telegraf'
+#    client = InfluxDBClient(INFLUXDB_HOST,'8086','','',INFLUXDB_NAME)
+    with app.app_context():
+        INFLUXDB_HOST     = app.config['INFLUXDB_HOST']
+        INFLUXDB_PORT     = app.config['INFLUXDB_PORT']
+        INFLUXDB_USERNAME = app.config['INFLUXDB_USERNAME']
+        INFLUXDB_PASSWORD = app.config['INFLUXDB_PASSWORD']
+        INFLUXDB_NAME     = app.config['INFLUXDB_NAME']
+
+#    client = InfluxDBClient(INFLUXDB_HOST, INFLUXDB_PORT, INFLUXDB_USERNAME, INFLUXDB_PASSWORD, INFLUXDB_NAME)
+    client = InfluxDBClient(
+                    INFLUXDB_HOST,
+                    INFLUXDB_PORT,
+                    INFLUXDB_USERNAME,
+                    INFLUXDB_PASSWORD,
+                    INFLUXDB_NAME
+                )
+
+
     source_filter = request.form.get('source_cc')
     target_filter = request.form.get('target_cc')
     interval = request.form.get('time_cc')

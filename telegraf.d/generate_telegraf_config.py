@@ -2,6 +2,7 @@ import sys
 import logging
 import jinja2
 import sqlite3
+import socket
 
 import pandas as pd
 
@@ -34,9 +35,9 @@ for device in lnetd_devices:
     )
 
     logger.info("Generate Telegraf configuration for : %s" % (device["name"]))
-    rendered_snmp = template_snmp.stream(host=device["ip"]).dump(
+    rendered_snmp = template_snmp.stream(host=socket.gethostbyname(device["name"].replace("_re0", "").replace("_re1", "")), devip=device["ip"], hostname=device["name"]).dump(
         f'/etc/telegraf/telegraf.d/{device["name"]}_snmp.conf'
     )
-    rendered_if_address = template_if_address.stream(host=device["ip"]).dump(
+    rendered_if_address = template_if_address.stream(host=socket.gethostbyname(device["name"].replace("_re0", "").replace("_re1", "")), devip=device["ip"], hostname=device["name"]).dump(
         f'/etc/telegraf/telegraf.d/{device["name"]}_if_address.conf'
     )

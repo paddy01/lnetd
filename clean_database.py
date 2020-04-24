@@ -1,6 +1,6 @@
 import sqlite3
 
-con = sqlite3.connect('/opt/lnetd/web_app/database.db')
+con = sqlite3.connect('web_app/database.db')
 cursor = con.cursor()
 cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
 all_tables = cursor.fetchall()
@@ -11,3 +11,4 @@ for table in delete_tables:
     qry = f'delete from {table};'
     cursor.execute(qry)
     con.commit()
+cursor.execute("VACUUM;")

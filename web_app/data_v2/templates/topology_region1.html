@@ -6,8 +6,8 @@
   {{ super() }}
   <!-- bootsrap table -->
   <!--alertify -->
-  <link href="{{ url_for('static', filename='vendors/alertifyjs/css/themes/bootstrap.css') }}" rel="stylesheet">
-  <link href="{{ url_for('static', filename='vendors/alertifyjs/css/alertify.css') }}" rel="stylesheet">
+  <link href="{{ url_for('.static', filename='vendors/alertifyjs/css/themes/bootstrap.css') }}" rel="stylesheet">
+  <link href="{{ url_for('.static', filename='vendors/alertifyjs/css/alertify.css') }}" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js-bootstrap-css/1.2.1/typeaheadjs.min.css" rel="stylesheet">
 
 {% endblock stylesheets %}
@@ -72,11 +72,11 @@
 
 {% block javascripts %}
   {{ super() }}
-<script src="{{ url_for('static', filename='vendors/plotly/plotly-latest.min.js') }}"></script>
-<script src="{{ url_for('static', filename='custom/topology/create_graph.js') }}"></script>
-<script src="{{ url_for('static', filename='custom/topology/getSPF.js') }}"></script>
-<script src="{{ url_for('static', filename='custom/topology/create_legend.js') }}"></script>
-<script src="{{ url_for('static', filename='vendors/alertifyjs/alertify.min.js') }}"></script>
+<script src="{{ url_for('base_blueprint.static', filename='vendors/plotly/plotly-latest.min.js') }}"></script>
+<script src="{{ url_for('base_blueprint.static', filename='custom/topology/create_graph.js') }}"></script>
+<script src="{{ url_for('base_blueprint.static', filename='custom/topology/getSPF.js') }}"></script>
+<script src="{{ url_for('base_blueprint.static', filename='custom/topology/create_legend.js') }}"></script>
+<script src="{{ url_for('base_blueprint.static', filename='vendors/alertifyjs/alertify.min.js') }}"></script>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="{{ url_for('data_blueprint.static', filename='d3js_v5_utils.js') }}"></script>
 <script src="{{ url_for('data_blueprint.static', filename='lnet_d3js.js') }}"></script>

@@ -32,11 +32,11 @@
 
 
     <!-- base:css -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='vendors/mdi/css/materialdesignicons.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('base_blueprint.static', filename='vendors/mdi/css/materialdesignicons.min.css') }}">
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='vendors/base/vendor.bundle.base.css') }}">
+    <link rel="stylesheet" href="{{ url_for('base_blueprint.static', filename='vendors/base/vendor.bundle.base.css') }}">
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('base_blueprint.static', filename='css/style.css') }}">
     <link rel="shortcut icon" href="{{ url_for('base_blueprint.static', filename='images/lnetd_logo.png') }}">
 
       {% endblock stylesheets %}
@@ -75,12 +75,12 @@
 
 
 
-                <script src="{{ url_for('static', filename='js/template.js') }}"></script>
+                <script src="{{ url_for('base_blueprint.static', filename='js/template.js') }}"></script>
 
-                <script src="{{ url_for('static', filename='vendors/chart.js/Chart.min.js') }}"></script>
+                <script src="{{ url_for('base_blueprint.static', filename='vendors/chart.js/Chart.min.js') }}"></script>
 
 
-		<script src="{{ url_for('static', filename='vendors/chartjs-plugin-datalabels/chartjs-plugin-datalabels.js') }}"></script>
+		<script src="{{ url_for('base_blueprint.static', filename='vendors/chartjs-plugin-datalabels/chartjs-plugin-datalabels.js') }}"></script>
 
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/1.4.0/perfect-scrollbar.min.js"></script>
 
@@ -89,10 +89,10 @@
       <script src="https://unpkg.com/chartjs-plugin-colorschemes"></script>
 
       <!-- BootstrapTable Modified Version for no records JavaScript -->
-      <script src="{{ url_for('static', filename='vendors/bootstrap-table/bootstrap-table.js') }}"></script>
+      <script src="{{ url_for('base_blueprint.static', filename='vendors/bootstrap-table/bootstrap-table.js') }}"></script>
 
       <!--Jsontables , custom js -->
-      <script src="{{ url_for('static', filename='vendors/jsontables/jsontables.js') }}"></script>
+      <script src="{{ url_for('base_blueprint.static', filename='vendors/jsontables/jsontables.js') }}"></script>
       <!-- Alertify JavaScript -->
       <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.12.0/build/alertify.min.js"></script>
       <!--Plotly-->
@@ -111,7 +111,7 @@
 <!--momentjs-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 
-<script src="{{ url_for('static', filename='vendors/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.js') }}"></script>
+<script src="{{ url_for('base_blueprint.static', filename='vendors/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.js') }}"></script>
       <script>
       Chart.defaults.global.legend.labels.usePointStyle = true;
       $.fn.editableform.buttons  = '<button type="submit" class="btn btn-success btn-sm editable-submit">OK</button><button type="button" class="btn btn-warning btn-sm editable-cancel">cancel</button>'

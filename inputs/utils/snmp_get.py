@@ -7,12 +7,18 @@ import re
 logger = get_module_logger(__name__, 'INFO')
 
 INFLUXDB_HOST = '127.0.0.1'
-INFLUXDB_PORT = '8806'
+INFLUXDB_PORT = '8086'
 INFLUXDB_NAME = 'telegraf'
 INFLUXDB_USERNAME = ''
 INFLUXDB_PASSWORD = ''
 
-client = InfluxDBClient(INFLUXDB_HOST, INFLUXDB_PORT, INFLUXDB_USERNAME, INFLUXDB_PASSWORD, INFLUXDB_NAME)
+client = InfluxDBClient(
+                INFLUXDB_HOST,
+                INFLUXDB_PORT,
+                INFLUXDB_USERNAME,
+                INFLUXDB_PASSWORD,
+                INFLUXDB_NAME
+            )
 
 
 def get_ifIndex_IP(hostname, interface):
@@ -20,10 +26,12 @@ def get_ifIndex_IP(hostname, interface):
                  (hostname, interface))
     if interface == 0:
         return -1
+
     timestamp = datetime.datetime.utcnow().isoformat()
     queryurl = "SELECT Ifindex as ifIndex from interface_address where hostname =~ /%s/ and  index = '%s' ORDER BY DESC limit 1" % (
-        hostname, interface)
+        hostname.replace("_re0", "").replace("_re1", ""), interface)
     result = client.query(queryurl)
+
     points = list(result.get_points(measurement='interface_address'))
     if not points:
         logger.warning('No ifIndex data for %s %s => replace with -1' %
@@ -44,7 +52,7 @@ def get_uti_ifIndex(hostname, interface, start):
     timestamp = datetime.datetime.utcnow().isoformat()
     queryurl = '''SELECT non_negative_derivative(last(ifHCOutOctets), 1s) *8 as bps from interface_statistics
                   where hostname =~ /%s/ and  ifIndex = '%s' AND time >= now()- %sh10m and time <=now()- %sh
-                  GROUP BY time(5m)''' % (hostname, interface, start, start)
+                  GROUP BY time(5m)''' % (hostname.replace("_re0", "").replace("_re1", ""), interface, start, start)
     result = client.query(queryurl)
     points = list(result.get_points(measurement='interface_statistics'))
     if not points:
@@ -63,8 +71,7 @@ def get_capacity_ifIndex(hostname, interface):
                  (hostname, interface))
     if interface == 0 or interface == -1:
         return -1
-    client = InfluxDBClient(INFLUXDB_HOST, INFLUXDB_PORT, INFLUXDB_USERNAME, INFLUXDB_PASSWORD, INFLUXDB_NAME)
-    queryurl = "SELECT last(ifHighSpeed) as capacity from interface_statistics where hostname =~ /%s/ and  ifIndex = '%s'" % (hostname, interface)
+    queryurl = "SELECT last(ifHighSpeed) as capacity from interface_statistics where hostname =~ /%s/ and  ifIndex = '%s'" % (hostname.replace("_re0", "").replace("_re1", ""), interface)
     result = client.query(queryurl)
     points = list(result.get_points(measurement='interface_statistics'))
     if not points:
@@ -86,7 +93,7 @@ def get_errors_ifIndex(hostname, interface, start):
     timestamp = datetime.datetime.utcnow().isoformat()
     queryurl = '''SELECT non_negative_derivative(last(ifInErrors), 1s) as errors from interface_statistics
                   where hostname =~ /%s/ and  ifIndex = '%s' AND time >= now()- %sh10m and time <=now()- %sh
-                  GROUP BY time(5m)''' % (hostname, interface, start, start)
+                  GROUP BY time(5m)''' % (hostname.replace("_re0", "").replace("_re1", ""), interface, start, start)
     result = client.query(queryurl)
     points = list(result.get_points(measurement='interface_statistics'))
     if not points:
@@ -102,7 +109,7 @@ def get_errors_ifIndex(hostname, interface, start):
 def get_sysdesc(hostname):
     #logger.debug('Get sysDesc from influxdb based on %s with %s'%(hostname))
     timestamp = datetime.datetime.utcnow().isoformat()
-    queryurl = '''SELECT last(sysDesc) from snmp where hostname =~ /%s/''' % (hostname)
+    queryurl = '''SELECT last(sysDesc) from snmp where hostname =~ /%s/''' % (hostname.replace("_re0", "").replace("_re1", ""))
     result = client.query(queryurl)
     points = list(result.get_points(measurement='snmp'))
     if not points:
@@ -130,7 +137,7 @@ def get_util_ifName(hostname, interface, start):
     timestamp = datetime.datetime.utcnow().isoformat()
     queryurl = '''SELECT non_negative_derivative(last(ifHCOutOctets), 1s) *8 from interface_statistics
                   where hostname =~ /%s/ and  ifName = '%s' AND time >= now()- %sh10m and time <=now()- %sh
-                  GROUP BY time(5m)''' % (hostname, interface, start, start)
+                  GROUP BY time(5m)''' % (hostname.replace("_re0", "").replace("_re1", ""), interface, start, start)
     result = client.query(queryurl)
     points = list(result.get_points(measurement='interface_statistics'))
     if not points:
@@ -149,9 +156,8 @@ def get_capacity_ifName(hostname, interface):
                  (hostname, interface))
     if interface == 0 or interface == -1:
         return -1
-    client = InfluxDBClient(INFLUXDB_HOST, INFLUXDB_PORT, INFLUXDB_USERNAME, INFLUXDB_PASSWORD, INFLUXDB_NAME)
     queryurl = "SELECT last(ifHighSpeed) from interface_statistics where hostname =~ /%s/ and  ifName = '%s'" % (
-        hostname, interface)
+        hostname.replace("_re0", "").replace("_re1", ""), interface)
     result = client.query(queryurl)
     points = list(result.get_points(measurement='interface_statistics'))
     if not points:
